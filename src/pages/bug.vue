@@ -6,31 +6,39 @@
     useRoute,
   } from '@nuxtjs/composition-api'
   import { useAppStore } from '@/src/entities/app.store'
+  import AppBlockNavigate from '../components/AppBlockNavigate.vue' 
   
-  function getName() {
-    const route = useRoute()
-    return route.value.name || ''
+  
+  function getName(value: any) {
+    return value.name || ''
   }
   
   export default defineComponent({
     name: 'BugPage',
+    components: {
+      AppBlockNavigate
+    },
     setup() {
       const appStore = useAppStore()
       const state = reactive({
         name: '',
       })
-  
+      const route = useRoute()
+      
       function onShowName() {
-        state.name = getName()
+        state.name = getName(route.value)
+        appStore.ADD_EVENT({name: 'bug_shown', props: {}}) 
       }
   
       onMounted(() => {
         appStore.loading = true
+        appStore.ADD_EVENT({name: 'bug_shown', props: {}}) 
       })
   
       return {
         state,
         onShowName,
+        route
       }
     },
   })
@@ -38,6 +46,7 @@
   
   <template>
     <div :class="$style.page">
+      <AppBlockNavigate />
       <div>
         Route name: "<strong>{{ state.name }}</strong>"
       </div>

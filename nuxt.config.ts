@@ -20,7 +20,7 @@ const config: NuxtConfig = {
 
   plugins: [],
 
-  components: false,
+  components: true,
 
   buildModules: [
     '@nuxt/typescript-build',
